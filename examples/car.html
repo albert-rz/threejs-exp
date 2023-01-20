@@ -79,18 +79,17 @@
 
       // Axes
       const axes = new AxesHelper(10);
-      axes.visible = false;
+      axes.visible = true;
       scene.add(axes);
 
       // Box
-      import { Car, Prism } from './js/car.js';
+      import { Car, Box } from './js/car.js';
 
       // scene.add(wheel)
-      const prism = new Prism(5, 5, 5, 0xfafa00, 0, 0, 0);
       // scene.add(prism);
       // prism.speak();
       // prism.update({width: 20})
-      const car = new Car();
+      const car = new Car(12, 8, 4)
       scene.add(car);
 
       // GUI options
