@@ -43,7 +43,7 @@
       import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
       import { OBJLoader } from 'three/addons/loaders/OBJLoader.js'
       import { MTLLoader } from 'three/addons/loaders/MTLLoader.js'
-
+      import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 
       // GUI
       const gui = new GUI();
@@ -56,6 +56,8 @@
       const renderer = new WebGLRenderer({ antialias: true });
       renderer.setPixelRatio(window.devicePixelRatio);
       renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.gammaOutput = true;
+
       document.body.appendChild(renderer.domElement);
 
       // Camera
@@ -94,35 +96,28 @@
       const objLoader = new OBJLoader();
 
       // Body
-      mtlLoader.load(
-        'models/jeep/body.mtl',
-        function(materials) {
-          materials.preload();
-          new OBJLoader()
-              .setMaterials(materials)
-              .load(
-                'models/jeep/body.obj',
-                function(object) {
-                  scene.add(object)
-                }
-              )
+
+      const loader = new GLTFLoader();
+
+      loader.load(
+        'models/jeep/jeep_multi.glb',
+        function(gltf) {
+          scene.add(gltf.scene)
+
+          const body = gltf.scene.getObjectByName("body");
+          body.position.y = 2
+          console.log(body)
+        },
+        // called while loading is progressing
+        function ( xhr ) {
+          console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+        },
+        // called when loading has errors
+        function ( error ) {
+          console.log( 'An error happened' );
         }
       )
 
-
-      // objLoader.load('models/jeep/body.obj',
-      //   function(object) {
-      //     scene.add(object)
-      //   },
-      //   // called when loading is in progresses
-      //   function ( xhr ) {
-      //     console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-      //   },
-      //   // called when loading has errors
-      //   function ( error ) {
-      //     console.log( 'An error happened' );
-      //   }
-      // )
 
       // GUI options
       const opt = {
