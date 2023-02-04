@@ -1,4 +1,4 @@
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 export class ModelLoader {
   constructor() {
@@ -11,19 +11,14 @@ export class ModelLoader {
       return;
     }
 
-    this._models[ref] = {
-      "url": url,
-      "loaded": false,
-      "model": null
-    }
+    this.#prepare(ref)
 
     // models["ref"] = true
     const loader = new GLTFLoader();
     loader.load(
       url,
       (gltf) => {
-        this._models[ref]["model"] = gltf.scene
-        this._models[ref]["loaded"] = true
+        this.#add(ref, gltf.scene)
       },
       // called while loading is progressing
       function (xhr) {
@@ -41,7 +36,20 @@ export class ModelLoader {
   }
 
   has(ref) {
-    return this.models.includes(ref)
+    return this.models.includes(ref);
+  }
+
+  #prepare(ref) {
+    this._models[ref] = {
+      url: url,
+      loaded: false,
+      model: null
+    };
+  }
+
+  #add(ref, model) {
+    this._models[ref]['model'] = model;
+    this._models[ref]['loaded'] = true;
   }
 
   speak() {
