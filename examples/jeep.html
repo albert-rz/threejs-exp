@@ -41,11 +41,11 @@
 
       import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
       import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-      import { OBJLoader } from 'three/addons/loaders/OBJLoader.js'
-      import { MTLLoader } from 'three/addons/loaders/MTLLoader.js'
-      import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
+      import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+      import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
+      import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-      import {ModelLoader} from './js/loader.js'
+      import { ModelLoader } from './js/loader.js';
 
       // GUI
       const gui = new GUI();
@@ -81,8 +81,8 @@
       scene.add(lights[1]);
       scene.add(lights[2]);
 
-      const ambientLight = new AmbientLight( 0xffffff, 1 );
-			scene.add( ambientLight );
+      const ambientLight = new AmbientLight(0xffffff, 1);
+      scene.add(ambientLight);
 
       // Orbit controls
       const orbit = new OrbitControls(camera, renderer.domElement);
@@ -98,6 +98,23 @@
       const objLoader = new OBJLoader();
 
       // Body
+      const loader = new ModelLoader();
+      loader.load('jeep', 'models/jeep/jeep_multi.glb');
+
+      function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+
+      async function foobar() {
+          await sleep(3000);
+          loader.speak()
+        }
+      foobar();
+
+      loader.speak();
+
+      console.log(loader.has('jeep'));
+      console.log(loader._models);
 
       // const loader = new GLTFLoader();
 
@@ -128,9 +145,6 @@
       //     console.log( 'An error happened' );
       //   }
       // )
-
-      const loader = new ModelLoader()
-      loader.speak()
 
       // GUI options
       const opt = {
@@ -174,8 +188,6 @@
         if (!opt.fixed) {
           // prism.update({width: 10, height: 10})
         }
-
-
 
         renderer.render(scene, camera);
       }
