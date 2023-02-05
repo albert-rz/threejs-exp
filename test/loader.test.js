@@ -1,20 +1,31 @@
 import { describe, expect, test } from 'vitest';
-import { ModelLoader } from 'examples/js/loader.js';
+import { LoadedModelRegistry, ModelLoader } from 'examples/js/loader.js';
 
-describe('Loader has method', () => {
+describe('LoadedModelRegistry', () => {
   test('has returns false for an unloaded model', () => {
-    const loader = new ModelLoader();
+    const registry = new LoadedModelRegistry();
 
-    if (process.env.NODE_ENV == "hola") {
-      expect(loader.has('foo')).toBeFalsy();
-    }
-    else {
-      expect(loader.has('foo')).toBeTruthy();
-    }
+    expect(registry.isEmpty()).toBeTruthy();
+    expect(registry.has('foo')).toBeFalsy();
   });
 
-  test('add then has', () => {
-    const loader = new ModelLoader();
+  test('has returns true while loading and loaded', () => {
+    const registry = new LoadedModelRegistry();
 
+    registry.loading('jeep', 'jeep_multi.glb');
+    expect(registry.has('jeep')).toBeTruthy();
+
+    registry.loaded('jeep', 'fake_object');
+    expect(registry.has('jeep')).toBeTruthy();
+  });
+
+  test('isLoaded returns false while loading and true when loaded', () => {
+    const registry = new LoadedModelRegistry();
+
+    registry.loading('jeep', 'jeep_multi.glb');
+    expect(registry.has('jeep')).toBeTruthy();
+
+    registry.loaded('jeep', 'fake_object');
+    expect(registry.has('jeep')).toBeTruthy();
   })
 });
