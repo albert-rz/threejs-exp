@@ -24,38 +24,51 @@ export class LoadedModelRegistry {
     this._registers[key]['model'] = model;
   }
 
+  get(key) {
+    try {
+    if (!this.isLoaded(key)) {
+      throw `${key} is not loaded`
+    }
+
+    return this._registers[key]["model"]
+  }
+
   isEmpty() {
     return this.keys.length == 0;
   }
 
   isLoaded(key) {
-    return this._registers[key]["loaded"] != null
+    return this._registers[key]['model'] != null;
+  }
+
+  speak() {
+    console.table(this._registers);
   }
 }
 
 export class ModelLoader {
   constructor() {
-    this._models = {};
+    this._registry = new LoadedModelRegistry();
   }
 
-  load(ref, url) {
-    if (this.has(ref)) {
-      console.log('Model already loaded');
+  load(key, url) {
+    if (this._registry.has(key)) {
+      console.log(`Model ${key} already exists`);
       return;
     }
 
-    this.#prepare(ref);
+    this._registry.loading(key, url);
 
     // models["ref"] = true
     const loader = new GLTFLoader();
     loader.load(
       url,
       (gltf) => {
-        this.#add(ref, gltf.scene);
+        this._registry.loaded(key, gltf.scene);
       },
       // called while loading is progressing
       function (xhr) {
-        console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+        console.log(`${key} is ${(xhr.loaded / xhr.total) * 100}% loaded`);
       },
       // called when loading has errors
       function (error) {
@@ -64,28 +77,11 @@ export class ModelLoader {
     );
   }
 
-  get models() {
-    return Object.keys(this._models);
-  }
-
-  has(ref) {
-    return this.models.includes(ref);
-  }
-
-  #prepare(ref) {
-    this._models[ref] = {
-      url: url,
-      loaded: false,
-      model: null,
-    };
-  }
-
-  #add(ref, model) {
-    this._models[ref]['model'] = model;
-    this._models[ref]['loaded'] = true;
+  get(key) {
+    return this._registry.get(key)
   }
 
   speak() {
-    console.log(this._models);
+    this._registry.speak();
   }
 }
