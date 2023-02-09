@@ -14,6 +14,10 @@ export class LoadedModelRegistry {
   }
 
   loading(key, url) {
+    if (this.isLoading(key)) {
+      throw `${key} is already loading`;
+    }
+
     this._registers[key] = {
       url: url,
       model: null,
@@ -24,20 +28,39 @@ export class LoadedModelRegistry {
     this._registers[key]['model'] = model;
   }
 
-  get(key) {
-    try {
-    if (!this.isLoaded(key)) {
-      throw `${key} is not loaded`
+  getModel(key) {
+    if (this.has(key) && this.isLoaded(key)) {
+      return this._registers[key]['model'];
     }
 
-    return this._registers[key]["model"]
+    throw `${key} is not loaded`;
+  }
+
+  getUrl(key) {
+    if (this.has(key)) {
+      return this._registers[key]['url'];
+    }
+
+    throw `${key} is not loaded`;
   }
 
   isEmpty() {
     return this.keys.length == 0;
   }
 
+  isLoading(key) {
+    if (!this.has(key)) {
+      return false;
+    }
+
+    return this._registers[key]['model'] == null;
+  }
+
   isLoaded(key) {
+    if (!this.has(key)) {
+      return false;
+    }
+
     return this._registers[key]['model'] != null;
   }
 
@@ -59,10 +82,10 @@ export class ModelLoader {
 
     this._registry.loading(key, url);
 
-    // models["ref"] = true
     const loader = new GLTFLoader();
     loader.load(
       url,
+      // called when loaded
       (gltf) => {
         this._registry.loaded(key, gltf.scene);
       },
@@ -78,7 +101,7 @@ export class ModelLoader {
   }
 
   get(key) {
-    return this._registry.get(key)
+    return this._registry.get(key);
   }
 
   speak() {
