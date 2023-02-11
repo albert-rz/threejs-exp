@@ -1,85 +1,98 @@
 import { describe, expect, test } from 'vitest';
-import { LoadedModelRegistry, ModelLoader } from 'examples/js/loader.js';
+import { LoadedModelRegister, ModelLoader } from 'examples/js/loader.js';
 
-describe('LoadedModelRegistry', () => {
+describe('LoadedModelRegister', () => {
   test('has returns false for an unloaded model', () => {
-    const registry = new LoadedModelRegistry();
+    const register = new LoadedModelRegister();
 
-    expect(registry.isEmpty()).toBeTruthy();
-    expect(registry.has('foo')).toBeFalsy();
+    expect(register.isEmpty()).toBeTruthy();
+    expect(register.has('foo')).toBeFalsy();
   });
 
   test('has returns true while loading and loaded, false otherwise', () => {
-    const registry = new LoadedModelRegistry();
+    const register = new LoadedModelRegister();
 
-    expect(registry.has('jeep')).toBeFalsy();
+    expect(register.has('jeep')).toBeFalsy();
 
-    registry.loading('jeep', 'jeep_multi.glb');
-    expect(registry.has('jeep')).toBeTruthy();
+    register.loading('jeep', 'jeep_multi.glb');
+    expect(register.has('jeep')).toBeTruthy();
 
-    registry.loaded('jeep', 'fake_object');
-    expect(registry.has('jeep')).toBeTruthy();
+    register.loaded('jeep', 'fake_object');
+    expect(register.has('jeep')).toBeTruthy();
   });
 
-  test(`loading`, () => {
-    const registry = new LoadedModelRegistry();
+  test('loading', () => {
+    const register = new LoadedModelRegister();
   });
 
   test('getModel returns a model if loaded, or throws an error otherwise', () => {
-    const registry = new LoadedModelRegistry();
+    const register = new LoadedModelRegister();
 
-    expect(() => registry.getModel('jeep')).toThrowError('not loaded');
+    expect(() => register.getModel('jeep')).toThrowError('not loaded');
 
-    registry.loading('jeep', 'url');
-    expect(() => registry.getModel('jeep')).toThrowError('not loaded');
+    register.loading('jeep', 'url');
+    expect(() => register.getModel('jeep')).toThrowError('not loaded');
 
-    registry.loaded('jeep', 'foo');
-    expect(registry.getModel('jeep')).toEqual('foo');
+    register.loaded('jeep', 'foo');
+    expect(register.getModel('jeep')).toEqual('foo');
   });
 
-  test(`getUrl returns urls key exists, or throws an error otherwise`, () => {
-    const registry = new LoadedModelRegistry()
+  test('getUrl returns urls key if exists, or throws an error otherwise', () => {
+    const register = new LoadedModelRegister();
 
-    expect(() => registry.getUrl('jeep').toThrowError('not loaded'));
+    expect(() => register.getUrl('jeep').toThrowError('not loaded'));
 
-    registry.loading('jeep', 'url')
-    expect(registry.getUrl('jeep')).toEqual('url')
+    register.loading('jeep', 'url');
+    expect(register.getUrl('jeep')).toEqual('url');
 
-    registry.loaded('jeep', 'model')
-    expect(registry.getUrl(key)).toEqual('url')
-  })
+    register.loaded('jeep', 'model');
+    expect(register.getUrl('jeep')).toEqual('url');
+  });
+
+  test('loading cnnot be called twice', () => {
+    const register = new LoadedModelRegister();
+
+    register.loading('jeep', 'jeep.url')
+    expect(() => register.loading('jeep', 'jeep.url')).toThrowError('already loading')
+  });
+
+  test('loaded must be called after', () => {
+    const register = new LoadedModelRegister();
+
+    expect(() => register.loaded('jeep', 'jeep.model')).toThrowError('called first')
+  });
 
   test('isEmpty returns true if empty, false otherwise', () => {
-    const registry = new LoadedModelRegistry();
+    const register = new LoadedModelRegister();
 
-    expect(registry.isEmpty()).toBeTruthy();
+    expect(register.isEmpty()).toBeTruthy();
 
-    registry.loading('jeep', 'jeep_multi.glb');
-    registry.loaded('jeep', 'foo');
-    expect(registry.isEmpty()).toBeFalsy();
+    register.loading('jeep', 'jeep_multi.glb');
+    register.loaded('jeep', 'foo');
+    expect(register.isEmpty()).toBeFalsy();
   });
 
   test('isLoaded returns false while loading and true when loaded', () => {
-    const registry = new LoadedModelRegistry();
+    const register = new LoadedModelRegister();
 
-    expect(registry.isLoaded('jeep')).toBeFalsy();
+    expect(register.isLoaded('jeep')).toBeFalsy();
 
-    registry.loading('jeep', 'jeep_multi.glb');
-    expect(registry.isLoaded('jeep')).toBeFalsy();
+    register.loading('jeep', 'jeep_multi.glb');
+    expect(register.isLoaded('jeep')).toBeFalsy();
 
-    registry.loaded('jeep', 'fake_object');
-    expect(registry.isLoaded('jeep')).toBeTruthy();
+    register.loaded('jeep', 'fake_object');
+    expect(register.isLoaded('jeep')).toBeTruthy();
   });
 
   test('isLoading returns true while loading and false when loaded', () => {
-    const registry = new LoadedModelRegistry();
+    const register = new LoadedModelRegister();
 
-    expect(registry.isLoading('jeep')).toBeFalsy();
+    expect(register.isLoading('jeep')).toBeFalsy();
 
-    registry.loading('jeep', 'jeep_multi.glb');
-    expect(registry.isLoading('jeep')).toBeTruthy();
+    register.loading('jeep', 'jeep_multi.glb');
+    expect(register.isLoading('jeep')).toBeTruthy();
 
-    registry.loaded('jeep', 'fake_object');
-    expect(registry.isLoading('jeep')).toBeFalsy();
+    register.loaded('jeep', 'fake_object');
+    expect(register.isLoading('jeep')).toBeFalsy();
   });
 });
