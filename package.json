@@ -8,13 +8,15 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "prettier": "prettier --write ."
   },
   "dependencies": {
     "three": "0.148.0"
   },
   "devDependencies": {
     "@vitest/coverage-istanbul": "^0.28.4",
+    "prettier": "^2.8.4",
     "vite": "^4.0.4",
     "vitest": "latest"
   }

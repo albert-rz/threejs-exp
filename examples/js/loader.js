@@ -69,15 +69,15 @@ export class LoadedModelRegister {
   }
 
   allLoaded() {
-    console.log(`iiiiiii keys are: ${this.keys}`)
+    console.log(`iiiiiii keys are: ${this.keys}`);
     for (const key of this.keys) {
-      console.log(`iiiiii ${key}`)
+      console.log(`iiiiii ${key}`);
       if (!this.isLoaded(key)) {
-        return false
+        return false;
       }
     }
 
-    return true
+    return true;
   }
 
   speak() {
@@ -121,7 +121,7 @@ export class ModelLoader {
   }
 
   allLoaded() {
-    return this._register.allLoaded()
+    return this._register.allLoaded();
   }
 
   speak() {

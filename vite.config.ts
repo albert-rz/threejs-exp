@@ -7,9 +7,9 @@ export default defineConfig({
     /* for example, use global to avoid globals imports (describe, test, expect): */
     // globals: true,
     coverage: {
-      provider: 'istanbul'
-    }
+      provider: 'istanbul',
+    },
   },
-})
+});
 
-console.log(process.env.NODE_ENV)
+console.log(process.env.NODE_ENV);

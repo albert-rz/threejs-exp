@@ -107,14 +107,14 @@
       }
 
       async function foobar() {
-          await sleep(10000);
-          loader.speak()
-        }
+        await sleep(3000);
+        loader.speak();
+        console.log(`allLoaded ${loader.allLoaded()}`);
+      }
       foobar();
 
       loader.speak();
-      console.log(loader.allLoaded())
-
+      console.log(loader.allLoaded());
 
       // const loader = new GLTFLoader();
 
