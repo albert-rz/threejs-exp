@@ -6,7 +6,6 @@ export class LoadedModelRegister {
   }
 
   get keys() {
-    // console.log(this._records)
     return Object.keys(this._records);
   }
 
@@ -70,7 +69,9 @@ export class LoadedModelRegister {
   }
 
   allLoaded() {
-    for (const key in this.keys) {
+    console.log(`iiiiiii keys are: ${this.keys}`)
+    for (const key of this.keys) {
+      console.log(`iiiiii ${key}`)
       if (!this.isLoaded(key)) {
         return false
       }
@@ -117,6 +118,10 @@ export class ModelLoader {
 
   get(key) {
     return this._register.get(key);
+  }
+
+  allLoaded() {
+    return this._register.allLoaded()
   }
 
   speak() {
