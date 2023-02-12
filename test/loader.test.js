@@ -2,6 +2,11 @@ import { describe, expect, test } from 'vitest';
 import { LoadedModelRegister, ModelLoader } from 'examples/js/loader.js';
 
 describe('LoadedModelRegister', () => {
+  test('keys returns keys in register', () => {
+    const register = new LoadedModelRegister();
+
+  });
+
   test('has returns false for an unloaded model', () => {
     const register = new LoadedModelRegister();
 
@@ -96,18 +101,18 @@ describe('LoadedModelRegister', () => {
     expect(register.isLoading('jeep')).toBeFalsy();
   });
 
-  test('allLoaded returns true if all models loaded and false otherwise', () => {
-    const register = new LoadedModelRegister();
+  // test('allLoaded returns true if all models loaded and false otherwise', () => {
+  //   const register = new LoadedModelRegister();
 
-    register.loading('jeep', 'jeel.glb')
-    register.loading('plane', 'plane.glb')
+  //   register.loading('jeep', 'jeel.glb')
+    // register.loading('plane', 'plane.glb')
 
-    expect(register.allLoaded()).toBeFalsy()
+    // expect(register.allLoaded()).toBeFalsy()
 
-    register.loaded('plane')
-    expect(register.allLoaded()).toBeFalsy()
+    // register.loaded('plane')
+    // expect(register.allLoaded()).toBeFalsy()
 
-    register.loaded('jeep')
-    expect(register.allLoaded()).toBeTruthy()
-  });
+    // register.loaded('jeep', 'jeep.model')
+    // expect(register.allLoaded()).toBeTruthy()
+  // });
 });

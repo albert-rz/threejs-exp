@@ -6,6 +6,7 @@ export class LoadedModelRegister {
   }
 
   get keys() {
+    // console.log(this._records)
     return Object.keys(this._records);
   }
 
