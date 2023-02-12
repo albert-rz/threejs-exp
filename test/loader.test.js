@@ -95,4 +95,19 @@ describe('LoadedModelRegister', () => {
     register.loaded('jeep', 'fake_object');
     expect(register.isLoading('jeep')).toBeFalsy();
   });
+
+  test('allLoaded returns true if all models loaded and false otherwise', () => {
+    const register = new LoadedModelRegister();
+
+    register.loading('jeep', 'jeel.glb')
+    register.loading('plane', 'plane.glb')
+
+    expect(register.allLoaded()).toBeFalsy()
+
+    register.loaded('plane')
+    expect(register.allLoaded()).toBeFalsy()
+
+    register.loaded('jeep')
+    expect(register.allLoaded()).toBeTruthy()
+  });
 });

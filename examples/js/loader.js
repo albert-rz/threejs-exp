@@ -68,6 +68,16 @@ export class LoadedModelRegister {
     return this._records[key]['model'] != null;
   }
 
+  allLoaded() {
+    for (const key in this.keys) {
+      if (!this.isLoaded(key)) {
+        return false
+      }
+    }
+
+    return true
+  }
+
   speak() {
     console.table(this._records);
   }
