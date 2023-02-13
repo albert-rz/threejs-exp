@@ -1,9 +1,15 @@
-import { beforeEach, describe, expect, test } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { LoadedModelRegister, ModelLoader } from 'examples/js/loader.js';
 
 beforeEach(async (context) => {
   // extend context
   context.register = new LoadedModelRegister();
+  context.loader = new ModelLoader();
+
+  vi.spyOn(context.loader, 'load').mockImplementation((key, url) => {
+    context.loader._register.loading(key, url)
+    context.loader._register.loaded(key, 'model')
+  })
 });
 
 describe('LoadedModelRegister', () => {
@@ -42,8 +48,8 @@ describe('LoadedModelRegister', () => {
     expect(register.getModel('jeep')).toEqual('foo');
   });
 
-  test('getUrl returns urls key if exists, or throws an error otherwise', ({ register }) => {
-    expect(() => register.getUrl('jeep').toThrowError('not loaded'));
+  test('getUrl returns urls key if exists, or throws an error otherwise', ({register}) => {
+    expect(() => register.getUrl('jeep')).toThrowError('not loaded');
 
     register.loading('jeep', 'jeep.glb');
     expect(register.getUrl('jeep')).toEqual('jeep.glb');
@@ -101,4 +107,12 @@ describe('LoadedModelRegister', () => {
     register.loaded('jeep', 'jeep.model');
     expect(register.allLoaded()).toBeTruthy();
   });
+});
+
+describe('ModelLoader', () => {
+  test('load', ({loader}) => {
+    loader.load('jeep', 'jeep.glb')
+
+    expect(loader.getUrl('jeepa')).toEqual('jeep.gl')
+  })
 });

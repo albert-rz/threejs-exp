@@ -69,9 +69,7 @@ export class LoadedModelRegister {
   }
 
   allLoaded() {
-    console.log(`iiiiiii keys are: ${this.keys}`);
     for (const key of this.keys) {
-      console.log(`iiiiii ${key}`);
       if (!this.isLoaded(key)) {
         return false;
       }
@@ -116,8 +114,12 @@ export class ModelLoader {
     );
   }
 
-  get(key) {
-    return this._register.get(key);
+  getModel(key) {
+    return this._register.getModel(key);
+  }
+
+  getUrl(key) {
+    return this._register.getUrl(key)
   }
 
   allLoaded() {
